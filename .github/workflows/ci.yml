@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Run Tests
+        run: go test ./... -v
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Build Plugin
+        run: make build checksum
+
+      - name: Generate Checksum
+        run: sha256sum *.zip > checksums.txt
+
+      - name: Upload Checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: checksums.txt
+
+      - name: Upload Plugin ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin
+          path: '*.zip'
