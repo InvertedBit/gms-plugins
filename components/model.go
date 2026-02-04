@@ -14,11 +14,23 @@ const (
 	PageOverride
 )
 
+type PropertyType string
+
+const (
+	PropertyString PropertyType = "string"
+	PropertyInt    PropertyType = "int"
+	PropertyBool   PropertyType = "bool"
+	PropertyList   PropertyType = "list"
+)
+
 type ComponentProperty struct {
-	Slug  string
-	Key   string
-	Value string
-	Type  ComponentPropertyType
+	Slug     string
+	Key      string
+	Value    string
+	Type     ComponentPropertyType
+	TypeStr  PropertyType
+	Required bool
+	Default  string
 }
 
 type ComponentMedia struct {
@@ -29,8 +41,10 @@ type ComponentMedia struct {
 }
 
 type Component struct {
+	Slug        string
 	Name        string
 	Description string
+	Properties  []ComponentProperty
 	Children    []Component
 	Render      RenderFunc
 }
