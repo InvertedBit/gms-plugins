@@ -25,18 +25,18 @@ func (bc ButtonComponent) Render(vm *ComponentViewModel) gomponents.Node {
 	return html.Button(
 		html.Class(class),
 		html.Type("button"),
-		html.Text(bc.Label),
+		gomponents.Text(bc.Label),
 	)
 }
 
 // CardComponent is a card container component example
 type CardComponent struct {
-	Title       string
-	Content     string
-	ImageURL    string
-	ImageAlt    string
-	Footer      string
-	Clickable   bool
+	Title     string
+	Content   string
+	ImageURL  string
+	ImageAlt  string
+	Footer    string
+	Clickable bool
 }
 
 func (cc CardComponent) Render(vm *ComponentViewModel) gomponents.Node {
@@ -65,10 +65,10 @@ func (cc CardComponent) Render(vm *ComponentViewModel) gomponents.Node {
 			html.Class("card-body"),
 			html.H2(
 				html.Class("card-title"),
-				html.Text(cc.Title),
+				gomponents.Text(cc.Title),
 			),
 			html.P(
-				html.Text(cc.Content),
+				gomponents.Text(cc.Content),
 			),
 		),
 	)
@@ -77,7 +77,7 @@ func (cc CardComponent) Render(vm *ComponentViewModel) gomponents.Node {
 		children = append(children,
 			html.Div(
 				html.Class("card-footer justify-end"),
-				html.Text(cc.Footer),
+				gomponents.Text(cc.Footer),
 			),
 		)
 	}
@@ -90,10 +90,10 @@ func (cc CardComponent) Render(vm *ComponentViewModel) gomponents.Node {
 
 // AlertComponent is an alert/notification component example
 type AlertComponent struct {
-	Message   string
-	Type      string // "info", "success", "warning", "error"
+	Message     string
+	Type        string // "info", "success", "warning", "error"
 	Dismissible bool
-	Title     string
+	Title       string
 }
 
 func (ac AlertComponent) Render(vm *ComponentViewModel) gomponents.Node {
@@ -108,14 +108,14 @@ func (ac AlertComponent) Render(vm *ComponentViewModel) gomponents.Node {
 		children = append(children,
 			html.H3(
 				html.Class("font-bold"),
-				html.Text(ac.Title),
+				gomponents.Text(ac.Title),
 			),
 		)
 	}
 
 	children = append(children,
 		html.Div(
-			html.Text(ac.Message),
+			gomponents.Text(ac.Message),
 		),
 	)
 
@@ -123,7 +123,7 @@ func (ac AlertComponent) Render(vm *ComponentViewModel) gomponents.Node {
 		children = append(children,
 			html.Button(
 				html.Class("btn btn-sm btn-ghost"),
-				html.Text("×"),
+				gomponents.Text("×"),
 			),
 		)
 	}
@@ -157,7 +157,7 @@ func (ic InputComponent) Render(vm *ComponentViewModel) gomponents.Node {
 			html.Class("label"),
 			html.Span(
 				html.Class("label-text"),
-				html.Text(ic.Label),
+				gomponents.Text(ic.Label),
 			),
 		),
 		html.Input(
@@ -175,7 +175,7 @@ func (ic InputComponent) Render(vm *ComponentViewModel) gomponents.Node {
 				html.Class("label"),
 				html.Span(
 					html.Class("label-text-alt"),
-					html.Text(ic.HelpText),
+					gomponents.Text(ic.HelpText),
 				),
 			),
 		)
@@ -187,7 +187,7 @@ func (ic InputComponent) Render(vm *ComponentViewModel) gomponents.Node {
 				html.Class("label"),
 				html.Span(
 					html.Class("label-text-alt text-error"),
-					html.Text(ic.Error),
+					gomponents.Text(ic.Error),
 				),
 			),
 		)
@@ -201,9 +201,9 @@ func (ic InputComponent) Render(vm *ComponentViewModel) gomponents.Node {
 
 // BadgeComponent is a status badge component example
 type BadgeComponent struct {
-	Label  string
-	Color  string // "neutral", "primary", "secondary", "accent", "ghost"
-	Size   string // "xs", "sm", "md", "lg"
+	Label   string
+	Color   string // "neutral", "primary", "secondary", "accent", "ghost"
+	Size    string // "xs", "sm", "md", "lg"
 	Rounded bool
 }
 
@@ -221,6 +221,6 @@ func (bc BadgeComponent) Render(vm *ComponentViewModel) gomponents.Node {
 
 	return html.Span(
 		html.Class(badgeClass),
-		html.Text(bc.Label),
+		gomponents.Text(bc.Label),
 	)
 }
