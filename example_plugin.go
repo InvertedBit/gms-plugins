@@ -18,11 +18,11 @@ func (hwc HelloWorldComponent) Render(vm *components.ComponentViewModel) gompone
 		html.Class("hello-world p-4 bg-base-200 rounded-lg"),
 		html.H2(
 			html.Class("text-xl font-bold mb-2"),
-			html.Text("Hello World!"),
+			gomponents.Text("Hello World!"),
 		),
 		html.P(
 			html.Class("text-base-content"),
-			html.Text(hwc.Message),
+			gomponents.Text(hwc.Message),
 		),
 	)
 }
@@ -37,25 +37,25 @@ func (cc CounterComponent) Render(vm *components.ComponentViewModel) gomponents.
 		html.Class("counter p-4 border rounded-lg"),
 		html.H3(
 			html.Class("font-bold mb-2"),
-			html.Text("Counter Component"),
+			gomponents.Text("Counter Component"),
 		),
 		html.Div(
 			html.Class("flex items-center gap-2"),
 			html.Button(
 				html.Class("btn btn-primary"),
 				html.Data("onClick", "decrement()"),
-				html.Text("-"),
+				gomponents.Text("-"),
 			),
 			html.Span(
 				html.Class("text-2xl font-mono w-12 text-center"),
 				html.Data("hx-get", "/counter/value"),
 				html.Data("hx-trigger", "counterUpdated from:body"),
-				html.Text("0"),
+				gomponents.Text("0"),
 			),
 			html.Button(
 				html.Class("btn btn-primary"),
 				html.Data("onClick", "increment()"),
-				html.Text("+"),
+				gomponents.Text("+"),
 			),
 		),
 	)
