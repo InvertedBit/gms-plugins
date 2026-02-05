@@ -36,7 +36,7 @@ type HookRegistry struct {
 type HookRegistration struct {
 	PluginID string
 	Priority int
-	Handler  HookHandler
+	Handler  hooks.HookHandler
 }
 
 // NewPluginManager creates a new PluginManager with an empty HookRegistry
@@ -98,7 +98,7 @@ func (pm *PluginManager) GetLoadedPlugins() map[string]Plugin {
 }
 
 // RegisterHook registers a hook handler for a specific hook name
-func (hr *HookRegistry) RegisterHook(pluginID, hookName string, priority int, handler HookHandler) {
+func (hr *HookRegistry) RegisterHook(pluginID, hookName string, priority int, handler hooks.HookHandler) {
 	registration := HookRegistration{
 		PluginID: pluginID,
 		Priority: priority,
@@ -137,7 +137,8 @@ func (hr *HookRegistry) ExecuteHooks(ctx context.Context, hookName string, args 
 	var errors []error
 	registrations := hr.hooks[hookName]
 	for _, reg := range registrations {
-		if err := reg.Handler(ctx, args); err != nil {
+		if newArgs, err := reg.Handler(ctx, args); err != nil {
+			args = newArgs
 			errors = append(errors, err)
 		}
 	}

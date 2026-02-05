@@ -11,7 +11,7 @@ type ComponentViewModel struct {
 	RestContext string
 }
 
-func NewComponentViewModel(restContext string, name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool) *ComponentViewModel {
+func NewComponentViewModel(name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool, restContext string) *ComponentViewModel {
 	submitURL := "/admin/instances/"
 	if isEdit {
 		submitURL = "/admin/instances/" + name
