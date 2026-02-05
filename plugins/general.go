@@ -6,10 +6,8 @@ import (
 	"plugin"
 
 	"github.com/invertedbit/gms-plugins/components"
+	"github.com/invertedbit/gms-plugins/hooks"
 )
-
-// HookHandler is a function that handles a hook event
-type HookHandler func(ctx context.Context, args map[string]interface{}) error
 
 // Plugin represents a loaded plugin
 type Plugin struct {
@@ -19,13 +17,13 @@ type Plugin struct {
 	Description string
 	Permissions []string
 
-	Components map[string]components.Component
-	Hooks      map[string]HookHandler
+	Components map[string]components.ComponentInterface
+	Hooks      map[string]hooks.Hook
 }
 
 // PluginManager manages plugin loading and hook registration
 type PluginManager struct {
-	Plugins    map[string]Plugin
+	Plugins map[string]Plugin
 	HookRegistry
 }
 

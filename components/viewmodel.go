@@ -1,16 +1,17 @@
 package components
 
 type ComponentViewModel struct {
-	IsEdit     bool
-	SubmitURL  string
-	CancelURL  string
-	FormErrors map[string]string
-	Name       string
-	Properties map[string]ComponentProperty
-	Media      map[string]ComponentMedia
+	IsEdit      bool
+	SubmitURL   string
+	CancelURL   string
+	FormErrors  map[string]string
+	Name        string
+	Properties  map[string]ComponentProperty
+	Media       map[string]ComponentMedia
+	RestContext string
 }
 
-func NewComponentViewModel(name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool) *ComponentViewModel {
+func NewComponentViewModel(restContext string, name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool) *ComponentViewModel {
 	submitURL := "/admin/instances/"
 	if isEdit {
 		submitURL = "/admin/instances/" + name
@@ -18,13 +19,14 @@ func NewComponentViewModel(name string, properties []ComponentProperty, media []
 	cancelURL := "/admin/instances"
 
 	return &ComponentViewModel{
-		IsEdit:     isEdit,
-		SubmitURL:  submitURL,
-		CancelURL:  cancelURL,
-		FormErrors: make(map[string]string),
-		Name:       name,
-		Properties: make(map[string]ComponentProperty),
-		Media:      make(map[string]ComponentMedia),
+		IsEdit:      isEdit,
+		SubmitURL:   submitURL,
+		CancelURL:   cancelURL,
+		FormErrors:  make(map[string]string),
+		Name:        name,
+		Properties:  make(map[string]ComponentProperty),
+		Media:       make(map[string]ComponentMedia),
+		RestContext: restContext,
 	}
 }
 

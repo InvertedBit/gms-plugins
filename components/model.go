@@ -1,6 +1,7 @@
 package components
 
 import (
+	"github.com/invertedbit/gms-plugins/hooks"
 	"maragu.dev/gomponents"
 )
 
@@ -40,11 +41,26 @@ type ComponentMedia struct {
 	URL      string
 }
 
+type ComponentInterface interface {
+	Init(properties []ComponentProperty, media []ComponentMedia) error
+	Render(vm *ComponentViewModel) gomponents.Node
+}
+
 type Component struct {
 	Slug        string
 	Name        string
 	Description string
 	Properties  []ComponentProperty
+	Media       []ComponentMedia
 	Children    []Component
 	Render      RenderFunc
+	Hooks       map[string]hooks.Hook
+}
+
+func (c Component) Init(properties []ComponentProperty, media []ComponentMedia) error {
+	// Default implementation does nothing, can be overridden by specific components
+	c.Properties = properties
+	c.Media = media
+	c.Hooks = make(map[string]hooks.Hook)
+	return nil
 }
