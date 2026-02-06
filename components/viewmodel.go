@@ -1,30 +1,47 @@
 package components
 
+import "strings"
+
+type RestPathType string
+
+const (
+	ComponentPath RestPathType = "component"
+	PluginPath    RestPathType = "plugin"
+	PagePath      RestPathType = "page"
+)
+
 type ComponentViewModel struct {
-	IsEdit     bool
-	SubmitURL  string
-	CancelURL  string
-	FormErrors map[string]string
-	Name       string
-	Properties map[string]ComponentProperty
-	Media      map[string]ComponentMedia
+	Slug        string
+	IsEdit      bool
+	SubmitURL   string
+	CancelURL   string
+	FormErrors  map[string]string
+	Name        string
+	Properties  map[string]ComponentProperty
+	Media       map[string]ComponentMedia
+	RestContext string
 }
 
-func NewComponentViewModel(name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool) *ComponentViewModel {
+func NewComponentViewModel(slug string, name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool, restContext string) *ComponentViewModel {
 	submitURL := "/admin/instances/"
 	if isEdit {
 		submitURL = "/admin/instances/" + name
 	}
 	cancelURL := "/admin/instances"
+	if strings.HasSuffix(restContext, "/") {
+		restContext = strings.TrimSuffix(restContext, "/")
+	}
 
 	return &ComponentViewModel{
-		IsEdit:     isEdit,
-		SubmitURL:  submitURL,
-		CancelURL:  cancelURL,
-		FormErrors: make(map[string]string),
-		Name:       name,
-		Properties: make(map[string]ComponentProperty),
-		Media:      make(map[string]ComponentMedia),
+		Slug:        slug,
+		IsEdit:      isEdit,
+		SubmitURL:   submitURL,
+		CancelURL:   cancelURL,
+		FormErrors:  make(map[string]string),
+		Name:        name,
+		Properties:  make(map[string]ComponentProperty),
+		Media:       make(map[string]ComponentMedia),
+		RestContext: restContext,
 	}
 }
 
@@ -63,4 +80,20 @@ func (vm *ComponentViewModel) GetFormError(field string) string {
 		return err
 	}
 	return ""
+}
+
+func (vm *ComponentViewModel) GetRESTPath(path string, pathType RestPathType) string {
+	newPath := path
+	if !strings.HasPrefix(path, "/") {
+		newPath = "/" + newPath
+	}
+	switch pathType {
+	case ComponentPath:
+		newPath = "/sys/components/" + vm.Slug + newPath
+	case PluginPath:
+		newPath = "/tbd"
+	case PagePath:
+		newPath = vm.RestContext + newPath
+	}
+	return newPath
 }
