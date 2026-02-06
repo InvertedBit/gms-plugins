@@ -1,6 +1,17 @@
 package components
 
+import "strings"
+
+type RestPathType string
+
+const (
+	ComponentPath RestPathType = "component"
+	PluginPath    RestPathType = "plugin"
+	PagePath      RestPathType = "page"
+)
+
 type ComponentViewModel struct {
+	Slug        string
 	IsEdit      bool
 	SubmitURL   string
 	CancelURL   string
@@ -11,14 +22,18 @@ type ComponentViewModel struct {
 	RestContext string
 }
 
-func NewComponentViewModel(name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool, restContext string) *ComponentViewModel {
+func NewComponentViewModel(slug string, name string, properties []ComponentProperty, media []ComponentMedia, isEdit bool, restContext string) *ComponentViewModel {
 	submitURL := "/admin/instances/"
 	if isEdit {
 		submitURL = "/admin/instances/" + name
 	}
 	cancelURL := "/admin/instances"
+	if strings.HasSuffix(restContext, "/") {
+		restContext = strings.TrimSuffix(restContext, "/")
+	}
 
 	return &ComponentViewModel{
+		Slug:        slug,
 		IsEdit:      isEdit,
 		SubmitURL:   submitURL,
 		CancelURL:   cancelURL,
@@ -65,4 +80,20 @@ func (vm *ComponentViewModel) GetFormError(field string) string {
 		return err
 	}
 	return ""
+}
+
+func (vm *ComponentViewModel) GetRESTPath(path string, pathType RestPathType) string {
+	newPath := path
+	if !strings.HasPrefix(path, "/") {
+		newPath = "/" + newPath
+	}
+	switch pathType {
+	case ComponentPath:
+		newPath = "/sys/components/" + vm.Slug + newPath
+	case PluginPath:
+		newPath = "/tbd"
+	case PagePath:
+		newPath = vm.RestContext + newPath
+	}
+	return newPath
 }

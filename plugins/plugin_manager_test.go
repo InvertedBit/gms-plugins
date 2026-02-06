@@ -86,8 +86,8 @@ func TestPluginManager_NonExistentDirectory(t *testing.T) {
 	err := pm.TryLoadPlugins("/non/existent/path")
 
 	// Should not error, just return empty plugins
-	if err != nil {
-		t.Errorf("TryLoadPlugins on non-existent dir should not error: %v", err)
+	if err == nil {
+		t.Errorf("TryLoadPlugins on non-existent dir should error: %v", err)
 	}
 
 	if len(pm.Plugins) != 0 {

@@ -20,7 +20,7 @@ type HelloWorldComponent struct {
 	Message string
 }
 
-func (hwc HelloWorldComponent) Init(properties []components.ComponentProperty, media []components.ComponentMedia) error {
+func (hwc *HelloWorldComponent) Init(properties []components.ComponentProperty, media []components.ComponentMedia) error {
 	hwc.Component.Init(properties, media)
 	// Initialize component properties if needed
 	for _, prop := range properties {
@@ -35,7 +35,7 @@ func (hwc HelloWorldComponent) Init(properties []components.ComponentProperty, m
 	return nil
 }
 
-func (hwc HelloWorldComponent) Render(vm *components.ComponentViewModel) gomponents.Node {
+func (hwc *HelloWorldComponent) Render(vm *components.ComponentViewModel) gomponents.Node {
 	return html.Div(
 		html.Class("hello-world p-4 bg-base-200 rounded-lg"),
 		html.H2(
@@ -55,7 +55,7 @@ type CounterComponent struct {
 	InitialCount int
 }
 
-func (cc CounterComponent) Init(properties []components.ComponentProperty, media []components.ComponentMedia) error {
+func (cc *CounterComponent) Init(properties []components.ComponentProperty, media []components.ComponentMedia) error {
 	cc.Component.Init(properties, media)
 	// Initialize component properties if needed
 	for _, prop := range properties {
@@ -81,7 +81,7 @@ func (cc CounterComponent) Init(properties []components.ComponentProperty, media
 	return nil
 }
 
-func (cc CounterComponent) HandleCounterUpdate(ctx context.Context, args map[string]interface{}) (map[string]interface{}, error) {
+func (cc *CounterComponent) HandleCounterUpdate(ctx context.Context, args map[string]interface{}) (map[string]interface{}, error) {
 	// Handle counter update logic here, e.g. increment or decrement based on args
 	action, ok := args["action"].(string)
 	if !ok {
@@ -103,7 +103,7 @@ func (cc CounterComponent) HandleCounterUpdate(ctx context.Context, args map[str
 	}, nil
 }
 
-func (cc CounterComponent) Render(vm *components.ComponentViewModel) gomponents.Node {
+func (cc *CounterComponent) Render(vm *components.ComponentViewModel) gomponents.Node {
 	return html.Div(
 		html.Class("counter p-4 border rounded-lg"),
 		html.H3(
@@ -140,11 +140,21 @@ func GetPlugins() map[string]plugins.Plugin {
 			Version:     "1.0.0",
 			Description: "A simple hello world component example",
 			Components: map[string]components.ComponentInterface{
-				"hello-world": HelloWorldComponent{
+				"hello-world": &HelloWorldComponent{
 					Message: "Welcome to the GMS Plugin System!",
 				},
-				"counter": CounterComponent{
+				"counter": &CounterComponent{
 					InitialCount: 0,
+				},
+				"slim-example": &components.Component{
+					Name:        "Slim Example",
+					Description: "A slim component example with minimal properties",
+					RenderFunction: func(vm *components.ComponentViewModel) gomponents.Node {
+						return html.Div(
+							html.Class("p-4 bg-base-300 rounded"),
+							gomponents.Text("This is a slim component!"),
+						)
+					},
 				},
 			},
 		},

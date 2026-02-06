@@ -3,6 +3,7 @@ package components
 import (
 	"github.com/invertedbit/gms-plugins/hooks"
 	"maragu.dev/gomponents"
+	"maragu.dev/gomponents/html"
 )
 
 type RenderFunc func(*ComponentViewModel) gomponents.Node
@@ -47,20 +48,27 @@ type ComponentInterface interface {
 }
 
 type Component struct {
-	Slug        string
-	Name        string
-	Description string
-	Properties  []ComponentProperty
-	Media       []ComponentMedia
-	Children    []Component
-	Render      RenderFunc
-	Hooks       map[string]hooks.Hook
+	Slug           string
+	Name           string
+	Description    string
+	Properties     []ComponentProperty
+	Media          []ComponentMedia
+	Children       []Component
+	RenderFunction RenderFunc
+	Hooks          map[string]hooks.Hook
 }
 
-func (c Component) Init(properties []ComponentProperty, media []ComponentMedia) error {
+func (c *Component) Init(properties []ComponentProperty, media []ComponentMedia) error {
 	// Default implementation does nothing, can be overridden by specific components
 	c.Properties = properties
 	c.Media = media
 	c.Hooks = make(map[string]hooks.Hook)
 	return nil
+}
+
+func (c *Component) Render(vm *ComponentViewModel) gomponents.Node {
+	if c.RenderFunction != nil {
+		return c.RenderFunction(vm)
+	}
+	return html.Div() // Return empty div if no render function is defined
 }
